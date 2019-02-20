@@ -24,28 +24,26 @@ import re
 import subprocess as sp
 from pathlib import Path
 
-# def fzf_apropos():
-#     sp.run(['man', '-k', '.'], stdout=)
-#     sp.run(['fzf'], stdin=)
-
-# create cache for the command list & descriptions
-cache_dir = '/tmp/what/'
-cache_name = 'cache'
+cache_dir = '/tmp/pypropros/'
+cache_name = 'pypropros_cache'
 cache_path = cache_dir + cache_name
-if not Path(cache_dir).exists():
-    sp.call(['mkdir', cache_dir])
-
-# run apropos to get list of mans + short descriptions
-apropos = sp.run(['apropos', '.'], stdout=sp.PIPE)
-all_mans = apropos.stdout.decode() #.splitlines()
-
-# populate cache - filtering out only shell commands and root commands
-with open(cache_path, 'w') as out:
-                          #a cmd name #match type (1) or (8)
-    for m in re.finditer('^[\w\d\-\.]+ \([18]\).*$', all_mans, re.MULTILINE):
-        out.write(m.group(0).replace("(8)", "#root").replace("(1)", "") + '\n')
+# create cache for the command list & descriptions if it's the first time
+# running this command in this boot
+if not Path(cache_path).exists():
+    if not Path(cache_dir).exists():
+        sp.call(['mkdir', cache_dir])
+    print("Creating cache...")
+    # run apropos to get list of mans + short descriptions
+    # populate cache - filtering out only shell commands and root commands
+    apropos = sp.run(['apropos', '.'], stdout=sp.PIPE)
+    all_mans = apropos.stdout.decode() #.splitlines()
+    with open(cache_path, 'w') as out:
+                            #a cmd name #match type (1) or (8)
+        for m in re.finditer('^[\w\d\-\.]+ \([18]\).*$', all_mans, re.MULTILINE):
+            # get rid of number tags and write to cache file
+            out.write(m.group(0).replace("(8)", "#root").replace("(1)", "") + '\n')
+    print("All done!")
 
 with open(cache_path, 'r') as f:
-    print(f.readlines)
     # as a start, just run the fzf utility
     sp.run(['fzf'], stdin=f.fileno())
