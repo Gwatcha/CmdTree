@@ -1,3 +1,6 @@
+#### This is a standalone, basic implentation of pypropos that passes apropos
+#### commands to fzf.
+
 ### Man page types.
 # 0     Header files
 # 0p    Header files (POSIX)
@@ -15,7 +18,6 @@
 # 9     Kernel routines
 # l     Local documentation
 # n     New manpages
-
 
 # regex
 import re
