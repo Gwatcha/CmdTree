@@ -1,4 +1,3 @@
-
 #regex
 import re
 import subprocess as sp
@@ -12,7 +11,7 @@ limit_to_commands = True
 class Cmd:
     """
     'command' class. A command has a name, the action (act) it performs on
-    an object (obj), and any caller defined metadata.
+    an object (obj), and a dictionary type metadata.
     """
 
     def __init__(self, name, obj, act, metadata):
@@ -22,21 +21,34 @@ class Cmd:
         self.act = act
         self.metadata = metadata
 
+def extract_obj_act_from_desc(desc, nlp):
+    "given the apropos description (desc) of a command, and a ( nlp ) model, returns a tuple (object, action) which is the best guess of the object acted on by the action of cmd."
+    # MVP implementation:
+    obj = ''
+    act = ''
 
+    # infer the object and action in this desc
+    span = nlp(desc)[:]
 
-def extract_obj_act_from_desc(cmd, desc):
-    "given the apropos description (desc) of a command (cmd), returns a tuple (object, action) which is the best guess of the object acted on by the action of cmd."
+    # case (1): the root of the dependency tree is a noun (eg. GCC compiler)
+    # - act = 'invoke'
+    # - obj = desc
+    if span.root.pos_ == 'NOUN':
+        obj = desc
+        act = 'invoke'
 
+    # case (2): the root of the dependency tree is a verb
+    # - act = root verb
+    # - obj = the dobj of the root verb is used to find the object head. the
+    # object is then the HEAD + all of it's children
+    if span.root.pos_ == 'VERB':
+        act = token.text
+        for child in token.children:
+            if child.dep_ == 'dobj':
+                # TODO min_obj = child.text
+                obj = child.subtree[:].text
 
-    '''
-    dobj: direct object from (x to y)
-    The direct object of a VP is the noun phrase which is the (accusative) object of the verb; the
-    direct object of a clause is the direct object of the VP which is the predicate of that clause.
-
-    “She gave me a raise” dobj(gave, raise)
-    “They win the lottery” dobj(win, lottery)
-    '''
-
+    return (obj , act)
 
 def extract_cmd_from_apropos():
     """
@@ -93,6 +105,9 @@ def extract_cmd_from_apropos():
     # used to limit number of entries read in the case of use_subset = True
     count = 0
 
+    # used to get action and object from a description
+    nlp = spacy.load('en_core_web_sm')
+
     for line in apropos_raw.stdout.decode().splitlines():
         # pick apart apropos line
         name  = name_re.search(line).group(0)
@@ -117,9 +132,8 @@ def extract_cmd_from_apropos():
             'which': which_out
         }
 
-
         ## extract object and action from apropos description
-        (obj, act) = extract_obj_act_from_desc()
+        (obj, act) = extract_obj_act_from_desc(man_desc, nlp)
 
         # create and append new command
         cmd = Cmd(name, obj, act, metadata)
@@ -133,4 +147,11 @@ def extract_cmd_from_apropos():
     return cmd_list
 
 
+cmd_list = extract_cmd_from_apropos()
+
 # TODO: Extract commands such as ip config, or ls -a, as well
+
+# TODO command + flag UNIX nodes obtained from parsing man page as well
+# as subcommands, such as for ip or for docker
+# if X is command:
+#     add_additional_nodes()
