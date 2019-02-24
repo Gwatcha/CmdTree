@@ -1,18 +1,20 @@
+** Update:
+This will be a man page nlp visualizer instead of a unix utility.
 ** pypropos stacks
-1. [ ] Minimal working version with apropos
-   - [ ] NLP Features
-     - [ ] Apropos entries
-       - [ ] Extraction/DB Fill
-         - [ ] extract nouns and verbs [[https://nlp.stanford.edu/software/tagger.shtml][POS-Tagger]]
-         - [ ] add noun & verb to db entry
-         - [ ] infer symset for noun & verb [[https://blog.xrds.acm.org/2017/07/power-wordnet-use-python/][PyWordNet]]
-         - [ ] add symset to db entres (verb/noun-symsets)
-       - [ ] Recall
-         - [ ] fork and alter fzf
-           - [ ] infer nouns and verbs input in real time
-           - [ ] weighting system
-             - [ ] search through raw list - weigh higher
-             - [ ] search through symset list - weigh lower
+# 1. [ ] Minimal working version with apropos
+#    - [ ] NLP Features
+#      - [ ] Apropos entries
+#        - [ ] Extraction/DB Fill
+#          - [ ] extract nouns and verbs [[https://nlp.stanford.edu/software/tagger.shtml][POS-Tagger]]
+#          - [ ] add noun & verb to db entry
+#          - [ ] infer symset for noun & verb [[https://blog.xrds.acm.org/2017/07/power-wordnet-use-python/][PyWordNet]]
+#          - [ ] add symset to db entres (verb/noun-symsets)
+#        - [ ] Recall
+#          - [ ] fork and alter fzf
+#            - [ ] infer nouns and verbs input in real time
+#            - [ ] weighting system
+#              - [ ] search through raw list - weigh higher
+#              - [ ] search through symset list - weigh lower
 2. [ ] graph visualizations
    1. [ ] apropos style
       - [ ] Hierarchichal w/ Hyponymy's and hypernymy's for verbs & nouns

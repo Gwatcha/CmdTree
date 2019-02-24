@@ -5,21 +5,11 @@ from shutil import which
 # for pos tagging
 import spacy
 
+from graph import Cmd
+
 use_subset = 1
 limit_to_commands = True
 
-class Cmd:
-    """
-    'command' class. A command has a name, the action (act) it performs on
-    an object (obj), and a dictionary type metadata.
-    """
-
-    def __init__(self, name, obj, act, metadata):
-        "create command object"
-        self.name = name
-        self.obj = obj
-        self.act = act
-        self.metadata = metadata
 
 def extract_obj_act_from_desc(desc, nlp):
     "given the apropos description (desc) of a command, and a ( nlp ) model, returns a tuple (object, action) which is the best guess of the object acted on by the action of cmd."
@@ -50,7 +40,7 @@ def extract_obj_act_from_desc(desc, nlp):
 
     return (obj , act)
 
-def extract_cmd_from_apropos():
+def extract_cmds():
     """
     "extracts the output of command:'apropos .' into a list of Cmd objects and returns it.
     each Cmd object's metadata has form as this example:
@@ -145,9 +135,6 @@ def extract_cmd_from_apropos():
                 break
 
     return cmd_list
-
-
-cmd_list = extract_cmd_from_apropos()
 
 # TODO: Extract commands such as ip config, or ls -a, as well
 
