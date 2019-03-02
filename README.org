@@ -5,9 +5,12 @@ first layer hosts the actions, then there are the objects of these actions, then
 the more specific objects, and then the Unix command which applies the action to
 this specific object.
 
-Extract of output
-find the full output in ~./graph_simple/simple-3layer-ascii-output.txt~
-or run python ~./graph_simple/graph.py~  to get the tree for your Unix system!
+Here is an extract of output, you may find the full output in
+simple/simple-3layer-ascii-output.txt
+
+You may also run python ~./graph_simple/graph.py~ to get the tree for your Unix
+system - just be sure to install the dependencies that module imports.
+
 #+begin_src
 |-- implement
 |   |-- sequence
@@ -53,7 +56,7 @@ or run python ~./graph_simple/graph.py~  to get the tree for your Unix system!
 #+end_src
 
 Future Plans
-1. Prettier visualization
+1. Prettier visualization with visjs
 2. Fix categorization of descriptions which do not have any verbs
 3. Use hypernyms from word net to create more layers for the verbs
 4. Create a site to display the visualization
