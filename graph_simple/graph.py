@@ -37,14 +37,15 @@ class CmdTree:
         if (action == None):
             action = AnyNode(ntype='ACTION', name=cmd.act, parent=self.root)
 
-        obj = find(action, lambda node: node.name == cmd.obj)
+        obj = find(action, lambda node: node.name == cmd.obj and node.ntype=='OBJECT')
         if (obj == None):
-            obj = AnyNode(ntype='HYPERYNM-OBJECT', name=cmd.obj, parent=action)
+            obj = AnyNode(ntype='OBJECT', name=cmd.obj, parent=action)
 
-        spec_obj = find(obj, lambda node: node.name == cmd.spec_obj and node.ntype == 'ATOMIC-OBJECT')
+        # find a more specific object if it exists, and if not, create it
+        spec_obj = find(obj, lambda node: node.name == cmd.spec_obj and node.ntype == 'OBJECT')
         if ( spec_obj == None ):
             if ( cmd.spec_obj != cmd.obj ):
-                spec_obj = AnyNode(ntype='ATOMIC-OBJECT', name=cmd.spec_obj, parent=obj)
+                spec_obj = AnyNode(ntype='OBJECT', name=cmd.spec_obj, parent=obj)
             else:
                 spec_obj = obj
 

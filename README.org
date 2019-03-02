@@ -1,0 +1,59 @@
+* CmdTree
+CmdTree uses part of speech tagging and apropos descriptions to generate a tree
+of Unix commands. In the current implementation, there are only 3 layers - the
+first layer hosts the actions, then there are the objects of these actions, then
+the more specific objects, and then the Unix command which applies the action to
+this specific object.
+
+Extract of output
+find the full output in ~./graph_simple/simple-3layer-ascii-output.txt~
+or run python ~./graph_simple/graph.py~  to get the tree for your Unix system!
+#+begin_src
+|-- implement
+|   |-- sequence
+|   |   +-- the clipboard operating system command sequence
+|   |       +-- urxvt-clipboard-osc
+|   |-- expansion
+|   |   +-- the " list " keysym expansion
+|   |       +-- urxvt-keysym-list
+|   |-- OSC
+|   |   +-- urxvt-overlay-osc
+|   +-- XIM
+|       +-- urxvt-xim-onthespot
+|-- measure
+|   |-- difference
+|   |   +-- clock difference between hosts
+|   |       +-- clockdiff
+|   +-- properties
+|       +-- tap - to - click properties of devices
+|           +-- libinput-measure-touchpad-tap
+|-- compare
+|   |-- files
+|   |   |-- two files
+|   |   |   |-- cmp
+|   |   |   +-- diff
+|   |   |-- compressed files
+|   |   |   |-- lzcmp
+|   |   |   |-- lzdiff
+|   |   |   |-- xzcmp
+|   |   |   |-- xzdiff
+|   |   |   |-- zcmp
+|   |   |   +-- zdiff
+|   |   +-- two audio files
+|   |       +-- sndfile-cmp
+|   |-- line
+|   |   +-- two sorted files line by line
+|   |       +-- comm
+|   |-- descriptions
+|   |   +-- terminfo descriptions
+|   |       +-- infocmp
+|   |-- catalog
+|   |   +-- message catalog and template
+|   |       +-- msgcmp
+#+end_src
+
+Future Plans
+1. Prettier visualization
+2. Fix categorization of descriptions which do not have any verbs
+3. Use hypernyms from word net to create more layers for the verbs
+4. Create a site to display the visualization

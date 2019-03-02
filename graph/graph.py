@@ -1,11 +1,15 @@
 # nlp
-import json
 import spacy
 
 from extract import extract_cmds_from_apropos
 from extract import Cmd
 
+# for hypernyms
+import wordnet
+
 import sp
+
+import json
 
 class Cmd:
     """
@@ -23,30 +27,33 @@ class Cmd:
 ## to json
 # json.dumps(Graph().__dict__)
 class CmdGraph:
-    def __init__(self, label='Unix Commands', metadata=None):
-        self.graph =  {
-            "metadata": metadata,
-            "nodes": [{
-                "id": 0,
-                "label": label,
-                "type": 'Base',
-                "metadata": {}
-            }],
-            "edges": [{}]
-        }
+    class Node:
+        "ntype is either VERB, NOUN, UNIX, or BASE"
+        def __init__(self, ntype, label, metadata):
+            self.label = label
+            self.ntype = ntype
+            self.metadata = metadata
 
+
+    def __init__(self, metadata=None):
+        # adjacency list representation using Node class as keys and values
+        base_node = Node('BASE', 'Unix Commands', None)
+        self.graph = {
+            base_node : []
+        }
 
     def exportJSON_sigmajs(path):
         'serializes graph to JSON object that can be imported into sigmajs or visjs'
 
-        # x.update({})
-        # sigmajs requires x,y coordinates for each node, so generate random ones
+        ## TODO add id for each node and edge
+        ## TODO add random x,y for each node
 
     # TODO remove cmd?
     def add(cmd):
         "adds the Cmd to graph, possibly building multiple nodes and edges in the process"
 
         # TODO attach node to base
+        self.graph()
 
         # TODO move node down tree if its OBJECT is a hyponym of any of it's OBJECT
         # non-unix child nodes.
@@ -63,9 +70,9 @@ class CmdGraph:
 def generate_graph():
     "returns a CmdGraph for the current system"
 
-    # include uname -a output in meta data
     metadata = {
-        'uname': sp.run([ 'uname', '-a' ], stdout=sp.PIPE).stdout.decode()
+        'uname': sp.run([ 'uname', '-a' ], stdout=sp.PIPE).stdout.decode(),
+        'label': 'Unix Graph'
     }
 
     graph = CmdGraph( metadata = metadata )

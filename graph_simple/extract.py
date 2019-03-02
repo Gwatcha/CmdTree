@@ -5,7 +5,7 @@ from shutil import which
 # for pos tagging
 import spacy
 
-use_subset = 300
+use_subset = 0
 limit_to_commands = True
 
 class Cmd:
@@ -16,7 +16,7 @@ class Cmd:
     def __init__(self, name, spec_obj, obj, act, metadata):
         "create command object"
         self.name = name
-        self.spec_obj = obj
+        self.spec_obj = spec_obj
         self.obj = obj
         self.act = act
         self.metadata = metadata
@@ -74,10 +74,22 @@ def extract_obj_act_from_desc(desc, nlp):
    # - spec_obj = tree
     if span.root.pos_ == 'PROPN':
         act = 'invoke'
-        spec_obj = span[:]
+        spec_obj = span[:].text
         for child in span.root.children:
             if child.dep_ == 'dobj':
                 obj = child.text
+        # case (5): dobj is attached to conjunction
+        if ( obj == ''):
+            for conj in span.root.conjuncts:
+                for child in conj.children:
+                #TODO add conjunction verbs to verb list for command instead of ignoring conjuncts
+                    if child.dep_ == 'dobj':
+                        obj = child.text
+                        spec_obj = ''
+                        for t in child.subtree:
+                            spec_obj += t.text + ' '
+                        spec_obj = spec_obj.strip()
+
 
     return (spec_obj, obj , act)
 
