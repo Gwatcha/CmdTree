@@ -1,5 +1,5 @@
 * CmdTree
-CmdTree uses part of speech tagging and apropos descriptions to generate a tree
+CmdTree uses parts of speech tagging, word dependencies, and apropos descriptions to generate a tree
 of Unix commands. In the current implementation, there are only 3 layers - the
 first layer hosts the actions, then there are the objects of these actions, then
 the more specific objects, and then the Unix command which applies the action to
